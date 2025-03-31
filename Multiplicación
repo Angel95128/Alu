@@ -1,0 +1,17 @@
+int A = 1; 
+int B = 1; 
+
+void setup() {
+  pinMode(2, INPUT);    // A (Multiplicando)
+  pinMode(3, INPUT);    // B (Multiplicador)
+  pinMode(12, OUTPUT);  // Producto (Resultado)
+}
+
+void loop() {
+  A = digitalRead(2);
+  B = digitalRead(3);
+
+  int Producto = A & B;  // Multiplicación lógica (AND)
+
+  digitalWrite(12, Producto);
+}

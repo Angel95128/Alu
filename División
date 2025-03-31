@@ -1,0 +1,22 @@
+int A = 0; 
+int B = 0; 
+
+void setup() {
+  pinMode(2, INPUT);    // A (Dividendo)
+  pinMode(3, INPUT);    // B (Divisor)
+  pinMode(12, OUTPUT);  // Cociente (Resultado de la división)
+  pinMode(13, OUTPUT);  // Error (División por cero)
+}
+
+void loop() {
+  A = digitalRead(2);
+  B = digitalRead(3);
+
+  if (B == 0) {
+    digitalWrite(12, LOW);   // Resultado inválido
+    digitalWrite(13, HIGH);  // Indica error
+  } else {
+    digitalWrite(12, A);     // Si B=1, el resultado es A
+    digitalWrite(13, LOW);   // No hay error
+  }
+}

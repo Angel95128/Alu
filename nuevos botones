@@ -1,0 +1,51 @@
+// Pines para botones
+const int btnSuma = 2;
+const int btnResta = 3;
+const int btnMult = 4;
+const int btnDiv = 5;
+
+// Pines para entradas (potenciómetros)
+const int pot1 = A0;
+const int pot2 = A1;
+
+void setup() {
+  pinMode(btnSuma, INPUT);
+  pinMode(btnResta, INPUT);
+  pinMode(btnMult, INPUT);
+  pinMode(btnDiv, INPUT);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  int val1 = analogRead(pot1) / 10; // Reduzco rango a 0-102
+  int val2 = analogRead(pot2) / 10;
+
+  if (digitalRead(btnSuma) == HIGH) {
+    Serial.print("Suma: ");
+    Serial.println(val1 + val2);
+    delay(500);
+  }
+
+  if (digitalRead(btnResta) == HIGH) {
+    Serial.print("Resta: ");
+    Serial.println(val1 - val2);
+    delay(500);
+  }
+
+  if (digitalRead(btnMult) == HIGH) {
+    Serial.print("Multiplicación: ");
+    Serial.println(val1 * val2);
+    delay(500);
+  }
+
+  if (digitalRead(btnDiv) == HIGH) {
+    Serial.print("División: ");
+    if (val2 != 0) {
+      Serial.println((float)val1 / val2);
+    } else {
+      Serial.println("Error: División por 0");
+    }
+    delay(500);
+  }
+}

@@ -1,0 +1,84 @@
+int A = 0;
+int B = 0;
+int C = 0;
+int D = 0;
+int value = 0;  // Representa el valor de 4 bits
+char data[26];
+int number_of_bytes_received;
+
+void setup() {
+  pinMode(2, INPUT);   // Bit A
+  pinMode(3, INPUT);   // Bit B
+  pinMode(4, INPUT);   // Bit C
+  pinMode(5, INPUT);   // Bit D
+  pinMode(12, OUTPUT); // LED para indicar operación lógica
+  pinMode(13, OUTPUT); // LED para indicar operación aritmética NOR, XOR Y OR
+  pinMode(11, OUTPUT); // LED para indicar el AND
+  Serial.begin(9600);
+  Serial.println("Esperando instrucciones...");
+}
+
+void loop() {
+  // Leer los valores de los pines
+  A = digitalRead(2);
+  B = digitalRead(3);
+  C = digitalRead(4);
+  D = digitalRead(5);
+
+  // Calcular el valor de 4 bits
+  value = (A << 3) | (B << 2) | (C << 1) | D;
+
+  while (Serial.available()) {
+    number_of_bytes_received = Serial.readBytesUntil(13, data, 25);
+    data[number_of_bytes_received] = 0;
+
+    if (strcmp(data, "AND") == 0) {
+      Serial.println("Operación AND");
+      if (value & 0b1111) digitalWrite(12, HIGH);
+    }
+    if (strcmp(data, "OR") == 0) {
+      Serial.println("Operación OR");
+      if (value | 0b1111) digitalWrite(12, HIGH);
+    }
+    if (strcmp(data, "XOR") == 0) {
+      Serial.println("Operación XOR");
+      if (value ^ 0b1111) digitalWrite(12, HIGH);
+    }
+    if (strcmp(data, "NOR") == 0) {
+      Serial.println("Operación NOR");
+      if (!(value | 0b1111)) digitalWrite(12, HIGH);
+    }
+    if (strcmp(data, "SUMA") == 0) {
+      int resultado = value + 1; // Ejemplo de operación suma
+      Serial.print("Operación SUMA: ");
+      Serial.println(resultado);
+      digitalWrite(13, HIGH);
+    }
+    if (strcmp(data, "RESTA") == 0) {
+      int resultado = value - 1; // Ejemplo de operación resta
+      Serial.print("Operación RESTA: ");
+      Serial.println(resultado);
+      digitalWrite(13, HIGH);
+    }
+    if (strcmp(data, "MULTIPLICACION") == 0) {
+      int resultado = value * 2; // Ejemplo de multiplicación
+      Serial.print("Operación MULTIPLICACION: ");
+      Serial.println(resultado);
+      digitalWrite(13, HIGH);
+    }
+    if (strcmp(data, "DIVISION") == 0) {
+      Serial.print("Operación DIVISION: ");
+      if (value != 0) {
+        float resultado = 15.0 / value; // Ejemplo de división
+        Serial.println(resultado);
+      } else {
+        Serial.println("Error: División entre cero");
+      }
+      digitalWrite(13, LOW);
+    }
+
+    delay(1000);
+    digitalWrite(12, LOW);
+    digitalWrite(13, LOW);
+  }
+}
